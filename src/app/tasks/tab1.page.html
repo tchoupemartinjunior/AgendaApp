@@ -1,0 +1,74 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-title>
+            Tâches
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+    <ion-toolbar>
+        <ion-item>
+            <ion-label class="Date">
+                Today
+                <p>{{today| date:'fullDate'}}</p>
+            </ion-label>
+        </ion-item>
+    </ion-toolbar>
+    <ion-col>
+        <!-- Sliding item with icon end options on end side -->
+
+        <ion-card class="taskItem" *ngFor="let tache of tachesTriees">
+            <ion-item-sliding [style.height]="tache.value.itemDone? '70px' : (!tache.value.itemDone? '' : '')">
+                <ion-card-header>
+
+                    <ion-card-subtitle [style.color]="tache.value.itemPriority === 'Elevé' ? 'red' : (tache.value.itemPriority === 'Faible' ? 'green' : 'orange')">
+                        {{tache.value.itemCategory}}
+                    </ion-card-subtitle>
+
+                    <ion-item>
+
+                        <ion-icon *ngIf="tache.value.itemPriority === 'Elevé'" color="danger" size="small" name="ellipse"></ion-icon>
+                        <ion-icon *ngIf="tache.value.itemPriority === 'Faible'" color="success" size="small" name="ellipse"></ion-icon>
+                        <ion-icon *ngIf="tache.value.itemPriority === 'Moyen'" color="warning" size="small" name="ellipse"></ion-icon>
+                        <ion-label [ngStyle]="tache.value.itemDone? {color: '#D2D2D2 ', textDecoration: 'line-through'} : (!tache.value.itemDone? {} : {})"> {{ tache.value.itemName}}</ion-label>
+
+                        &nbsp;
+                        <ion-checkbox slot="end" color="dark" [(ngModel)]="tache.value.itemDone" (ionChange)="changeTaskState(tache)"></ion-checkbox>
+                    </ion-item>
+
+                </ion-card-header>
+                <ion-row>
+
+                    <ion-card-content class="due-date">
+                        {{tache.value.itemDueDate |date:'fullDate'}}<br> {{tache.value.itemDueDate |date:'HH:mm'}}
+                    </ion-card-content>
+
+                </ion-row>
+
+
+
+                <ion-item-options>
+                    <ion-item-option color="primary" (click)="update(tache)">
+                        <ion-icon slot="end" name="pencil"></ion-icon>
+                    </ion-item-option>
+                    <ion-item-option color="danger" (click)="delete(tache.key)">
+                        <ion-icon slot="end" ios="trash" md="trash"></ion-icon>
+                    </ion-item-option>
+                </ion-item-options>
+            </ion-item-sliding>
+        </ion-card>
+    </ion-col>
+
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="addTask()">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+
+    <ion-router-outlet></ion-router-outlet>
+
+
+</ion-content>
